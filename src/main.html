@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Good Neighbor - Community Help</title>
+  <!-- Using Leaflet instead of Google Maps (free, no API key needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: #2f2f2f;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    /* Login/Signup Screen Styles */
+    .auth-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .auth-container {
+      background: #3a3a3a;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .auth-title {
+      color: #ffffff;
+      font-size: 28px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-label {
+      color: #b0b0b0;
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      background: #2f2f2f;
+      border: 2px solid #5a5a5a;
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #7a7a7a;
+    }
+
+    .button-group {
+      margin-top: 30px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #5a5a5a;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary:hover {
+      background: #6a6a6a;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #4a4a4a;
+      color: #ffffff;
+    }
+
+    .btn-secondary:hover {
+      background: #5a5a5a;
+      transform: translateY(-2px);
+    }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 20px;
+      color: #b0b0b0;
+      font-size: 14px;
+    }
+
+    .auth-switch a {
+      color: #4a9d5f;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .auth-switch a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background: #d9534f;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .success-message {
+      background: #4a9d5f;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* Selection Screen Styles */
+    .selection-screen {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .selection-container {
+      background: #3a3a3a;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .selection-title {
+      color: #ffffff;
+      font-size: 28px;
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .selection-subtitle {
+      color: #b0b0b1;
+      font-size: 14px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .btn-selection {
+      width: 100%;
+      padding: 18px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #5a5a5a;
+      color: #ffffff;
+    }
+
+    .btn-selection:hover {
+      background: #6a6a6a;
+      transform: translateY(-2px);
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #4a4a4a;
+      color: #b0b0b0;
+    }
+
+    .btn-logout:hover {
+      background: #5a5a5a;
+      color: #ffffff;
+    }
+
+    /* Main Screen Styles with Sidebar */
+    .main-screen {
+      display: none;
+      height: 100vh;
+      position: relative;
+    }
+
+    .main-layout {
+      display: flex;
+      height: 100vh;
+      padding-top: 60px;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background: #3a3a3a;
+      padding: 20px;
+      overflow-y: auto;
+      border-right: 2px solid #2f2f2f;
+    }
+
+    .sidebar-title {
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #5a5a5a;
+    }
+
+    .filter-section {
+      margin-bottom: 25px;
+    }
+
+    .filter-section-title {
+      color: #b0b0b0;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #2f2f2f;
+      border: 2px solid #5a5a5a;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #7a7a7a;
+    }
+
+    .filter-checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-checkbox-label {
+      display: flex;
+      align-items: center;
+      color: #b0b0b0;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .filter-checkbox-label:hover {
+      background: #2f2f2f;
+    }
+
+    .filter-checkbox-label input[type="checkbox"] {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .main-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #2f2f2f;
+      border-bottom: 2px solid #3a3a3a;
+    }
+
+    .header-info {
+      color: #b0b0b0;
+      font-size: 14px;
+    }
+
+    .btn-my-tasks {
+      padding: 8px 16px;
+      background: #4a9d5f;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-my-tasks:hover {
+      background: #5ab370;
+      transform: translateY(-2px);
+    }
+
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      justify-content: center;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    .tile {
+      width: 100%;
+      min-height: 140px;
+      background: #5a5a5a;
+      border-radius: 22px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tile:hover {
+      background: #6a6a6a;
+      transform: translateY(-2px);
+    }
+
+    .tile-title {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .tile-info {
+      color: #b0b0b0;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .tile-distance {
+      color: #4a9d5f;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .tile-category {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 8px;
+      background: #4a4a4a;
+      color: #ffffff;
+      margin-right: 6px;
+    }
+
+    .tile-urgency {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .urgency-high {
+      background: #d9534f;
+      color: #ffffff;
+    }
+
+    .urgency-medium {
+      background: #f0ad4e;
+      color: #ffffff;
+    }
+
+    .urgency-low {
+      background: #5bc0de;
+      color: #ffffff;
+    }
+
+    .tile-age {
+      color: #888;
+      font-size: 12px;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .tile-creator {
+      color: #4a9d5f;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .tile.empty {
+      background: #3a3a3a;
+      cursor: default;
+    }
+
+    .tile.empty:hover {
+      background: #3a3a3a;
+      transform: none;
+    }
+
+    /* Form Screen Styles */
+    .form-screen {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      overflow-y: auto;
+    }
+
+    .form-container {
+      background: #3a3a3a;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 20px;
+    }
+
+    .form-title {
+      color: #ffffff;
+      font-size: 28px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Map Container */
+    #map {
+      width: 100%;
+      height: 300px;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 2px solid #5a5a5a;
+      z-index: 1;
+    }
+
+    .map-instructions {
+      color: #b0b0b0;
+      font-size: 12px;
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    /* Tablet and Desktop: 2-3 columns */
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 900px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 1000px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 60px;
+        height: calc(100vh - 60px);
+        z-index: 1500;
+        transition: left 0.3s;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .sidebar-toggle {
+        display: block !important;
+      }
+
+      .main-content {
+        width: 100%;
+      }
+    }
+
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 20px;
+      background: #5a5a5a;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 1400;
+    }
+
+    /* Custom scrollbar styling */
+    .scrollable-content::-webkit-scrollbar,
+    .sidebar::-webkit-scrollbar,
+    .form-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-track,
+    .sidebar::-webkit-scrollbar-track,
+    .form-container::-webkit-scrollbar-track {
+      background: #2f2f2f;
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb,
+    .sidebar::-webkit-scrollbar-thumb,
+    .form-container::-webkit-scrollbar-thumb {
+      background: #5a5a5a;
+      border-radius: 4px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb:hover,
+    .sidebar::-webkit-scrollbar-thumb:hover,
+    .form-container::-webkit-scrollbar-thumb:hover {
+      background: #6a6a6a;
+    }
+
+    /* Back Button Styles */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #5a5a5a;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+
+    .back-button:hover {
+      background: #6a6a6a;
+      transform: translateY(-2px);
+    }
+
+    /* Modal/Popup Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: #3a3a3a;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-title {
+      color: #ffffff;
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .modal-info {
+      color: #b0b0b0;
+      font-size: 16px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .modal-btn-accept {
+      background: #4a9d5f;
+      color: #ffffff;
+    }
+
+    .modal-btn-accept:hover {
+      background: #5ab370;
+      transform: translateY(-2px);
+    }
+
+    .modal-btn-cancel {
+      background: #5a5a5a;
+      color: #ffffff;
+    }
+
+    .modal-btn-cancel:hover {
+      background: #6a6a6a;
+      transform: translateY(-2px);
+    }
+
+    /* Utility classes */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login/Signup Screen -->
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-container">
+      <h1 class="auth-title" id="authTitle">Welcome to Good Neighbor</h1>
+      <div class="error-message" id="authError"></div>
+      <div class="success-message" id="authSuccess"></div>
+      
+      <!-- Login Form -->
+      <form id="loginForm">
+        <div class="input-group">
+          <label class="input-label" for="loginUsername">Username</label>
+          <input 
+            type="text" 
+            id="loginUsername" 
+            class="input-field" 
+            placeholder="Enter your username"
+            required
+            minlength="3"
+          />
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="loginPassword">Password</label>
+          <input 
+            type="password" 
+            id="loginPassword" 
+            class="input-field" 
+            placeholder="Enter your password"
+            required
+            minlength="4"
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+        <div class="auth-switch">
+          Don't have an account? <a id="showSignup">Sign up</a>
+        </div>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signupForm" class="hidden">
+        <div class="input-group">
+          <label class="input-label" for="signupUsername">Username</label>
+          <input 
+            type="text" 
+            id="signupUsername" 
+            class="input-field" 
+            placeholder="Choose a username"
+            required
+            minlength="3"
+          />
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="signupPassword">Password</label>
+          <input 
+            type="password" 
+            id="signupPassword" 
+            class="input-field" 
+            placeholder="Choose a password"
+            required
+            minlength="4"
+          />
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="signupPasswordConfirm">Confirm Password</label>
+          <input 
+            type="password" 
+            id="signupPasswordConfirm" 
+            class="input-field" 
+            placeholder="Confirm your password"
+            required
+            minlength="4"
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+        <div class="auth-switch">
+          Already have an account? <a id="showLogin">Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Selection Screen -->
+  <div class="selection-screen" id="selectionScreen">
+    <div class="selection-container">
+      <h1 class="selection-title">How can we help you?</h1>
+      <p class="selection-subtitle">Logged in as: <span id="currentUsername"></span></p>
+      <button class="btn-selection" id="btnWantHelp">I want help</button>
+      <button class="btn-selection" id="btnWantToHelp">I want to help</button>
+      <button class="btn-logout" id="btnLogout">Logout</button>
+    </div>
+  </div>
+
+  <!-- Form Screen -->
+  <div class="form-screen" id="formScreen">
+    <button class="back-button" id="backFromForm">← Back</button>
+    <div class="form-container">
+      <h1 class="form-title">Request Help</h1>
+      <form id="helpForm">
+        <div class="input-group">
+          <label class="input-label" for="taskTitle">Task Title</label>
+          <input
+            type="text"
+            id="taskTitle"
+            class="input-field"
+            placeholder="What do you need help with?"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="taskCategory">Category</label>
+          <select
+            id="taskCategory"
+            class="input-field"
+            required
+          >
+            <option value="">Select category</option>
+            <option value="moving">Moving & Transport</option>
+            <option value="gardening">Gardening & Yard Work</option>
+            <option value="shopping">Shopping & Errands</option>
+            <option value="tech">Tech Support</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="repairs">Repairs & Maintenance</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="taskDuration">Duration</label>
+          <select
+            id="taskDuration"
+            class="input-field"
+            required
+          >
+            <option value="">Select duration</option>
+            <option value="< 30 min">Less than 30 minutes</option>
+            <option value="30-60 min">30-60 minutes</option>
+            <option value="1-2 hours">1-2 hours</option>
+            <option value="2-4 hours">2-4 hours</option>
+            <option value="4+ hours">4+ hours</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="taskLocation">Location Address</label>
+          <input
+            type="text"
+            id="taskLocation"
+            class="input-field"
+            placeholder="Enter address or click on map"
+            required
+          />
+          <div id="map"></div>
+          <p class="map-instructions">Click on the map to set the exact location</p>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="taskUrgency">Urgency</label>
+          <select
+            id="taskUrgency"
+            class="input-field"
+            required
+          >
+            <option value="">Select urgency level</option>
+            <option value="high">High - Urgent</option>
+            <option value="medium">Medium - Soon</option>
+            <option value="low">Low - Flexible</option>
+          </select>
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Screen -->
+  <div class="main-screen" id="mainScreen">
+    <button class="back-button" id="backFromMain">← Back</button>
+    <button class="sidebar-toggle" id="sidebarToggle">☰ Filters</button>
+    
+    <div class="main-layout">
+      <!-- Sidebar with Filters -->
+      <div class="sidebar" id="sidebar">
+        <h2 class="sidebar-title">Filters</h2>
+        
+        <div class="filter-section">
+          <div class="filter-section-title">Sort By</div>
+          <select id="sortFilter" class="filter-select">
+            <option value="urgency">Urgency (High to Low)</option>
+            <option value="distance">Distance (Nearest First)</option>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Urgency</div>
+          <select id="urgencyFilter" class="filter-select">
+            <option value="all">All Urgency Levels</option>
+            <option value="high">High Urgency</option>
+            <option value="medium">Medium Urgency</option>
+            <option value="low">Low Urgency</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Distance</div>
+          <select id="distanceFilter" class="filter-select">
+            <option value="all">Any Distance</option>
+            <option value="1">Within 1 km</option>
+            <option value="2">Within 2 km</option>
+            <option value="5">Within 5 km</option>
+            <option value="10">Within 10 km</option>
+            <option value="20">Within 20 km</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Duration</div>
+          <select id="durationFilter" class="filter-select">
+            <option value="all">Any Duration</option>
+            <option value="< 30 min">Less than 30 min</option>
+            <option value="30-60 min">30-60 minutes</option>
+            <option value="1-2 hours">1-2 hours</option>
+            <option value="2-4 hours">2-4 hours</option>
+            <option value="4+ hours">4+ hours</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Category</div>
+          <div class="filter-checkbox-group">
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="moving" checked>
+              Moving & Transport
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="gardening" checked>
+              Gardening & Yard Work
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="shopping" checked>
+              Shopping & Errands
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="tech" checked>
+              Tech Support
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="cleaning" checked>
+              Cleaning
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="repairs" checked>
+              Repairs & Maintenance
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="other" checked>
+              Other
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="main-header">
+          <div class="header-info" id="taskCount">Loading tasks...</div>
+          <button class="btn-my-tasks" id="btnMyTasks">My Active Tasks</button>
+        </div>
+        <div class="scrollable-content">
+          <div class="grid" id="taskGrid">
+            <!-- Tasks will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Accept Modal -->
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle">Task Details</h2>
+      <div class="modal-info"><strong>Created by:</strong> <span id="modalCreator"></span></div>
+      <div class="modal-info"><strong>Category:</strong> <span id="modalCategory"></span></div>
+      <div class="modal-info"><strong>Duration:</strong> <span id="modalDuration"></span></div>
+      <div class="modal-info"><strong>Location:</strong> <span id="modalLocation"></span></div>
+      <div class="modal-info"><strong>Distance:</strong> <span id="modalDistance"></span></div>
+      <div class="modal-info"><strong>Urgency:</strong> <span id="modalUrgency"></span></div>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
+        <button class="modal-btn modal-btn-accept" id="modalAccept">Accept Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Active Tasks Modal -->
+  <div class="modal" id="myTasksModal">
+    <div class="modal-content">
+      <h2 class="modal-title">My Active Tasks</h2>
+      <div id="myTasksList" style="max-height: 300px; overflow-y: auto; margin: 20px 0;">
+        <!-- Active tasks will be displayed here -->
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" id="closeMyTasks">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // USER AUTHENTICATION SYSTEM
+    // ============================================
+    
+    let currentUser = null;
+    
+    // Get all users from localStorage
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('goodNeighborUsers')) || {};
+    }
+    
+    // Save users to localStorage
+    function saveUsers(users) {
+      localStorage.setItem('goodNeighborUsers', JSON.stringify(users));
+    }
+    
+    // Show error message
+    function showError(message) {
+      const errorEl = document.getElementById('authError');
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+      setTimeout(() => {
+        errorEl.style.display = 'none';
+      }, 3000);
+    }
+    
+    // Show success message
+    function showSuccess(message) {
+      const successEl = document.getElementById('authSuccess');
+      successEl.textContent = message;
+      successEl.style.display = 'block';
+      setTimeout(() => {
+        successEl.style.display = 'none';
+      }, 3000);
+    }
+    
+    // Switch between login and signup forms
+    document.getElementById('showSignup').addEventListener('click', function() {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('signupForm').classList.remove('hidden');
+      document.getElementById('authTitle').textContent = 'Create Account';
+    });
+    
+    document.getElementById('showLogin').addEventListener('click', function() {
+      document.getElementById('signupForm').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('hidden');
+      document.getElementById('authTitle').textContent = 'Welcome to Good Neighbor';
+    });
+    
+    // Handle signup
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('signupUsername').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupPasswordConfirm').value;
+      
+      if (password !== confirmPassword) {
+        showError('Passwords do not match!');
+        return;
+      }
+      
+      const users = getUsers();
+      
+      if (users[username]) {
+        showError('Username already exists!');
+        return;
+      }
+      
+      // Create new user
+      users[username] = {
+        password: password,
+        createdAt: new Date().toISOString()
+      };
+      
+      saveUsers(users);
+      showSuccess('Account created successfully! Please login.');
+      
+      // Switch to login form
+      setTimeout(() => {
+        document.getElementById('signupForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('authTitle').textContent = 'Welcome to Good Neighbor';
+        document.getElementById('signupForm').reset();
+      }, 1500);
+    });
+    
+    // Handle login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      const users = getUsers();
+      
+      if (!users[username]) {
+        showError('Username not found!');
+        return;
+      }
+      
+      if (users[username].password !== password) {
+        showError('Incorrect password!');
+        return;
+      }
+      
+      // Login successful
+      currentUser = username;
+      sessionStorage.setItem('currentUser', username);
+      
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('selectionScreen').style.display = 'flex';
+      document.getElementById('currentUsername').textContent = username;
+      
+      document.getElementById('loginForm').reset();
+    });
+    
+    // Handle logout
+    document.getElementById('btnLogout').addEventListener('click', function() {
+      currentUser = null;
+      sessionStorage.removeItem('currentUser');
+      
+      document.getElementById('selectionScreen').style.display = 'none';
+      document.getElementById('mainScreen').style.display = 'none';
+      document.getElementById('formScreen').style.display = 'none';
+      document.getElementById('authScreen').style.display = 'flex';
+    });
+    
+    // ============================================
+    // TASK MANAGEMENT SYSTEM
+    // ============================================
+    
+    let tasks = [];
+    let activeTasks = [];
+    let currentTaskIndex = null;
+    let userLocation = null;
+    let map = null;
+    let marker = null;
+    let selectedLocation = null;
+
+    // Current filter states
+    let filters = {
+      urgency: 'all',
+      distance: 'all',
+      duration: 'all',
+      categories: ['moving', 'gardening', 'shopping', 'tech', 'cleaning', 'repairs', 'other'],
+      sort: 'urgency'
+    };
+
+    // Load all tasks from localStorage
+    function loadAllTasks() {
+      const allTasks = JSON.parse(localStorage.getItem('goodNeighborTasks')) || [];
+      tasks = allTasks;
+    }
+
+    // Save all tasks to localStorage
+    function saveAllTasks() {
+      localStorage.setItem('goodNeighborTasks', JSON.stringify(tasks));
+    }
+
+    // Load user's active tasks
+    function loadActiveTasks() {
+      if (!currentUser) return;
+      const userActiveTasks = JSON.parse(localStorage.getItem('goodNeighborActiveTasks_' + currentUser)) || [];
+      activeTasks = userActiveTasks;
+    }
+
+    // Save user's active tasks
+    function saveActiveTasks() {
+      if (!currentUser) return;
+      localStorage.setItem('goodNeighborActiveTasks_' + currentUser, JSON.stringify(activeTasks));
+    }
+
+    // Function to get user's current location
+    function getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            console.log('User location obtained:', userLocation);
+            renderTasks();
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            // Default to Toronto if geolocation fails
+            userLocation = { lat: 43.6532, lng: -79.3832 };
+            renderTasks();
+          }
+        );
+      } else {
+        console.error('Geolocation not supported');
+        userLocation = { lat: 43.6532, lng: -79.3832 };
+        renderTasks();
+      }
+    }
+
+    // Function to calculate distance between two points (Haversine formula)
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Radius of the Earth in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c;
+      return distance;
+    }
+
+    // Function to format distance
+    function formatDistance(distance) {
+      if (distance < 1) {
+        return `${Math.round(distance * 1000)} m away`;
+      } else {
+        return `${distance.toFixed(1)} km away`;
+      }
+    }
+
+    // Initialize Leaflet Map for form
+    function initMap() {
+      const defaultLocation = [43.6532, -79.3832]; // Toronto
+      
+      map = L.map('map').setView(defaultLocation, 13);
+      
+      // Add OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      marker = L.marker(defaultLocation, { draggable: true }).addTo(map);
+
+      // Update location when marker is moved
+      marker.on('dragend', function(event) {
+        const position = marker.getLatLng();
+        selectedLocation = { lat: position.lat, lng: position.lng };
+        reverseGeocode(selectedLocation);
+      });
+
+      // Click on map to set location
+      map.on('click', function(event) {
+        selectedLocation = { lat: event.latlng.lat, lng: event.latlng.lng };
+        marker.setLatLng(event.latlng);
+        reverseGeocode(selectedLocation);
+      });
+
+      // Try to get user's current location for map center
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const userPos = [position.coords.latitude, position.coords.longitude];
+          map.setView(userPos, 13);
+          marker.setLatLng(userPos);
+          selectedLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+          reverseGeocode(selectedLocation);
+        });
+      }
+    }
+
+    // Reverse geocode to get address from coordinates (using Nominatim)
+    function reverseGeocode(location) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.lat}&lon=${location.lng}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.display_name) {
+            document.getElementById('taskLocation').value = data.display_name;
+          }
+        })
+        .catch(error => {
+          console.error('Geocoding error:', error);
+          document.getElementById('taskLocation').value = `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`;
+        });
+    }
+
+    // Function to calculate time ago
+    function getTimeAgo(timestamp) {
+      const now = new Date();
+      const taskTime = new Date(timestamp);
+      const diffMs = now - taskTime;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+      if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    }
+
+    // Function to get category display name
+    function getCategoryName(category) {
+      const categories = {
+        'moving': 'Moving & Transport',
+        'gardening': 'Gardening & Yard Work',
+        'shopping': 'Shopping & Errands',
+        'tech': 'Tech Support',
+        'cleaning': 'Cleaning',
+        'repairs': 'Repairs & Maintenance',
+        'other': 'Other'
+      };
+      return categories[category] || category;
+    }
+
+    // Function to render tasks on the grid
+    function renderTasks() {
+      const taskGrid = document.getElementById('taskGrid');
+      taskGrid.innerHTML = '';
+      
+      let filteredTasks = tasks.filter(task => {
+        // Filter by urgency
+        if (filters.urgency !== 'all' && task.urgency !== filters.urgency) {
+          return false;
+        }
+
+        // Filter by duration
+        if (filters.duration !== 'all' && task.duration !== filters.duration) {
+          return false;
+        }
+
+        // Filter by category
+        if (!filters.categories.includes(task.category)) {
+          return false;
+        }
+
+        // Filter by distance
+        if (filters.distance !== 'all' && userLocation && task.coordinates) {
+          const distance = calculateDistance(
+            userLocation.lat, userLocation.lng,
+            task.coordinates.lat, task.coordinates.lng
+          );
+          if (distance > parseFloat(filters.distance)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Add distance to tasks
+      filteredTasks = filteredTasks.map(task => {
+        if (userLocation && task.coordinates) {
+          task.distance = calculateDistance(
+            userLocation.lat, userLocation.lng,
+            task.coordinates.lat, task.coordinates.lng
+          );
+        } else {
+          task.distance = null;
+        }
+        return task;
+      });
+
+      // Sort tasks
+      if (filters.sort === 'urgency') {
+        const urgencyOrder = { high: 0, medium: 1, low: 2 };
+        filteredTasks.sort((a, b) => urgencyOrder[a.urgency] - urgencyOrder[b.urgency]);
+      } else if (filters.sort === 'distance') {
+        filteredTasks.sort((a, b) => {
+          if (a.distance === null) return 1;
+          if (b.distance === null) return -1;
+          return a.distance - b.distance;
+        });
+      } else if (filters.sort === 'newest') {
+        filteredTasks.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else if (filters.sort === 'oldest') {
+        filteredTasks.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      }
+      
+      filteredTasks.forEach((task) => {
+        const originalIndex = tasks.indexOf(task);
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        
+        const urgencyClass = `urgency-${task.urgency}`;
+        const urgencyLabel = task.urgency.charAt(0).toUpperCase() + task.urgency.slice(1);
+        
+        let distanceHTML = '';
+        if (task.distance !== null) {
+          distanceHTML = `<div class="tile-distance">📍 ${formatDistance(task.distance)}</div>`;
+        }
+
+        tile.innerHTML = `
+          <div class="tile-title">${task.title}</div>
+          <div class="tile-creator">👤 Posted by ${task.createdBy}</div>
+          <div class="tile-category">${getCategoryName(task.category)}</div>
+          <div class="tile-info">⏱️ ${task.duration}</div>
+          <div class="tile-info">📌 ${task.location}</div>
+          ${distanceHTML}
+          <div class="tile-urgency ${urgencyClass}">${urgencyLabel}</div>
+          <div class="tile-age">${getTimeAgo(task.timestamp)}</div>
+        `;
+        tile.addEventListener('click', () => openTaskModal(originalIndex));
+        taskGrid.appendChild(tile);
+      });
+
+      // Update task count
+      document.getElementById('taskCount').textContent =
+        `Showing ${filteredTasks.length} of ${tasks.length} tasks`;
+
+      if (filteredTasks.length === 0) {
+        taskGrid.innerHTML = '<p style="color: #b0b0b0; text-align: center; padding: 40px;">No tasks match your filters</p>';
+      }
+    }
+
+    // Function to open task modal
+    function openTaskModal(index) {
+      currentTaskIndex = index;
+      const task = tasks[index];
+      
+      document.getElementById('modalTitle').textContent = task.title;
+      document.getElementById('modalCreator').textContent = task.createdBy;
+      document.getElementById('modalCategory').textContent = getCategoryName(task.category);
+      document.getElementById('modalDuration').textContent = task.duration;
+      document.getElementById('modalLocation').textContent = task.location;
+      
+      if (task.distance !== null && task.distance !== undefined) {
+        document.getElementById('modalDistance').textContent = formatDistance(task.distance);
+      } else {
+        document.getElementById('modalDistance').textContent = 'Unknown';
+      }
+      
+      document.getElementById('modalUrgency').textContent = task.urgency.charAt(0).toUpperCase() + task.urgency.slice(1);
+      document.getElementById('taskModal').style.display = 'flex';
+    }
+
+    // Function to close task modal
+    function closeTaskModal() {
+      document.getElementById('taskModal').style.display = 'none';
+      currentTaskIndex = null;
+    }
+
+    // Handle "I want help" button
+    document.getElementById('btnWantHelp').addEventListener('click', function() {
+      const selectionScreen = document.getElementById('selectionScreen');
+      const formScreen = document.getElementById('formScreen');
+      
+      selectionScreen.style.display = 'none';
+      formScreen.style.display = 'flex';
+      
+      // Initialize map when form is shown
+      setTimeout(() => {
+        if (!map) {
+          initMap();
+        }
+      }, 100);
+    });
+
+    // Handle "I want to help" button
+    document.getElementById('btnWantToHelp').addEventListener('click', function() {
+      const selectionScreen = document.getElementById('selectionScreen');
+      const mainScreen = document.getElementById('mainScreen');
+      
+      selectionScreen.style.display = 'none';
+      mainScreen.style.display = 'block';
+      
+      loadAllTasks();
+      loadActiveTasks();
+      getUserLocation();
+    });
+
+    // Handle help form submission
+    document.getElementById('helpForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const taskTitle = document.getElementById('taskTitle').value;
+      const taskCategory = document.getElementById('taskCategory').value;
+      const taskDuration = document.getElementById('taskDuration').value;
+      const taskLocation = document.getElementById('taskLocation').value;
+      const taskUrgency = document.getElementById('taskUrgency').value;
+      
+      const taskData = {
+        title: taskTitle,
+        category: taskCategory,
+        duration: taskDuration,
+        location: taskLocation,
+        urgency: taskUrgency,
+        coordinates: selectedLocation || null,
+        timestamp: new Date().toISOString(),
+        createdBy: currentUser
+      };
+      
+      tasks.push(taskData);
+      saveAllTasks();
+      
+      document.getElementById('helpForm').reset();
+      selectedLocation = null;
+      
+      alert('Your help request has been submitted!');
+      
+      const formScreen = document.getElementById('formScreen');
+      const mainScreen = document.getElementById('mainScreen');
+      
+      formScreen.style.display = 'none';
+      mainScreen.style.display = 'block';
+      
+      loadAllTasks();
+      getUserLocation();
+    });
+
+    // Back button from form screen
+    document.getElementById('backFromForm').addEventListener('click', function() {
+      const formScreen = document.getElementById('formScreen');
+      const selectionScreen = document.getElementById('selectionScreen');
+      
+      formScreen.style.display = 'none';
+      selectionScreen.style.display = 'flex';
+    });
+
+    // Back button from main screen
+    document.getElementById('backFromMain').addEventListener('click', function() {
+      const mainScreen = document.getElementById('mainScreen');
+      const selectionScreen = document.getElementById('selectionScreen');
+      
+      mainScreen.style.display = 'none';
+      selectionScreen.style.display = 'flex';
+    });
+
+    // Sidebar toggle for mobile
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    });
+
+    // Modal cancel button
+    document.getElementById('modalCancel').addEventListener('click', function() {
+      closeTaskModal();
+    });
+
+    // Modal accept button
+    document.getElementById('modalAccept').addEventListener('click', function() {
+      if (currentTaskIndex !== null) {
+        const acceptedTask = tasks[currentTaskIndex];
+        activeTasks.push(acceptedTask);
+        
+        tasks.splice(currentTaskIndex, 1);
+        saveAllTasks();
+        saveActiveTasks();
+        renderTasks();
+        closeTaskModal();
+        alert('Task accepted! Thank you for helping your neighbor!');
+      }
+    });
+
+    // Filter event listeners
+    document.getElementById('sortFilter').addEventListener('change', function() {
+      filters.sort = this.value;
+      renderTasks();
+    });
+
+    document.getElementById('urgencyFilter').addEventListener('change', function() {
+      filters.urgency = this.value;
+      renderTasks();
+    });
+
+    document.getElementById('distanceFilter').addEventListener('change', function() {
+      filters.distance = this.value;
+      renderTasks();
+    });
+
+    document.getElementById('durationFilter').addEventListener('change', function() {
+      filters.duration = this.value;
+      renderTasks();
+    });
+
+    // Category checkboxes
+    document.querySelectorAll('.category-filter').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          if (!filters.categories.includes(this.value)) {
+            filters.categories.push(this.value);
+          }
+        } else {
+          filters.categories = filters.categories.filter(cat => cat !== this.value);
+        }
+        renderTasks();
+      });
+    });
+
+    // My Active Tasks button
+    document.getElementById('btnMyTasks').addEventListener('click', function() {
+      const myTasksList = document.getElementById('myTasksList');
+      
+      if (activeTasks.length === 0) {
+        myTasksList.innerHTML = '<p style="color: #b0b0b0; text-align: center;">You have no active tasks</p>';
+      } else {
+        myTasksList.innerHTML = activeTasks.map((task, index) => `
+          <div style="background: #2f2f2f; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+            <div style="color: #ffffff; font-weight: 600; margin-bottom: 8px;">${task.title}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">👤 Requested by ${task.createdBy}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">📦 ${getCategoryName(task.category)}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">⏱️ ${task.duration}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">📍 ${task.location}</div>
+            <button onclick="completeTask(${index})" style="margin-top: 10px; padding: 8px 16px; background: #4a9d5f; color: white; border: none; border-radius: 6px; cursor: pointer;">Mark Complete</button>
+          </div>
+        `).join('');
+      }
+      
+      document.getElementById('myTasksModal').style.display = 'flex';
+    });
+
+    // Close My Tasks modal
+    document.getElementById('closeMyTasks').addEventListener('click', function() {
+      document.getElementById('myTasksModal').style.display = 'none';
+    });
+
+    // Complete task function
+    window.completeTask = function(index) {
+      activeTasks.splice(index, 1);
+      saveActiveTasks();
+      alert('Task completed! Great job helping your neighbor!');
+      document.getElementById('myTasksModal').style.display = 'none';
+    };
+
+    // Close modal when clicking outside
+    document.getElementById('taskModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeTaskModal();
+      }
+    });
+
+    // Close my tasks modal when clicking outside
+    document.getElementById('myTasksModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        document.getElementById('myTasksModal').style.display = 'none';
+      }
+    });
+
+    // Check if user is already logged in on page load
+    window.addEventListener('load', function() {
+      const loggedInUser = sessionStorage.getItem('currentUser');
+      if (loggedInUser) {
+        currentUser = loggedInUser;
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('selectionScreen').style.display = 'flex';
+        document.getElementById('currentUsername').textContent = loggedInUser;
+      }
+    });
+  </script>
+</body>
+</html>
