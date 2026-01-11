@@ -10,7 +10,18 @@
   <!-- Navigation Header -->
   <nav class="nav-header">
     <a href="main.html" class="nav-brand">
-      <img src="logo .png" alt="Good Neighbour Logo" class="logo-nav">
+      <svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" fill="white" stroke="#5a8f6f" stroke-width="3"/>
+        <path d="M100 40 L140 80 L140 130 L60 130 L60 80 Z" fill="none" stroke="#3d5a80" stroke-width="4"/>
+        <circle cx="75" cy="90" r="15" fill="#3d5a80"/>
+        <circle cx="125" cy="90" r="15" fill="#5a8f6f"/>
+        <path d="M60 110 Q75 95 90 110" fill="none" stroke="#3d5a80" stroke-width="3"/>
+        <path d="M110 110 Q125 95 140 110" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+        <rect x="85" y="140" width="12" height="15" fill="#3d5a80"/>
+        <rect x="103" y="140" width="12" height="15" fill="#5a8f6f"/>
+        <path d="M50 100 Q100 50 150 100" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+      </svg>
+      <span class="nav-brand-text">GoodNeighbour</span>
     </a>
     <a href="#" class="nav-link" id="navLogin">Login</a>
   </nav>
@@ -25,20 +36,83 @@
         <p class="hero-subtitle">
           Sign up to post tasks, offer help, and be part of a caring community.
         </p>
-        <button class="btn btn-primary btn-get-started" id="btnGetStarted">Get Started</button>
+        <button class="btn btn-primary" id="btnGetStarted" style="max-width: 200px;">Get Started</button>
       </div>
       <div class="hero-illustration">
-        <img src="hero-image.png" alt="Community members helping each other">
+        <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Illustration placeholder - simplified community helping scene -->
+          <ellipse cx="300" cy="380" rx="250" ry="20" fill="#e0ddd8" opacity="0.5"/>
+          
+          <!-- Person 1 - holding box -->
+          <rect x="150" y="200" width="60" height="100" fill="#3d5a80" rx="30"/>
+          <circle cx="180" cy="180" r="25" fill="#f0ad4e"/>
+          <rect x="140" y="240" width="35" height="50" fill="#f39c12" rx="5"/>
+          
+          <!-- Person 2 - elderly with cane -->
+          <rect x="280" y="210" width="55" height="90" fill="#e74c3c" rx="25"/>
+          <circle cx="307" cy="190" r="23" fill="#ecf0f1"/>
+          <line x1="320" y1="250" x2="340" y2="300" stroke="#8b4513" stroke-width="4"/>
+          
+          <!-- Person 3 - watering plant -->
+          <rect x="420" y="220" width="50" height="80" fill="#5a8f6f" rx="25"/>
+          <circle cx="445" cy="200" r="22" fill="#f0ad4e"/>
+          <ellipse cx="480" cy="280" rx="25" ry="15" fill="#8b4513"/>
+          <circle cx="480" cy="260" r="20" fill="#27ae60"/>
+          
+          <!-- Plants/greenery -->
+          <ellipse cx="100" cy="320" rx="60" ry="40" fill="#5a8f6f" opacity="0.6"/>
+          <ellipse cx="500" cy="330" rx="70" ry="45" fill="#5a8f6f" opacity="0.6"/>
+          
+          <!-- Hearts/care symbols -->
+          <path d="M 250 150 Q 240 140 230 150 Q 220 160 230 170 L 250 190 L 270 170 Q 280 160 270 150 Q 260 140 250 150 Z" fill="#e74c3c" opacity="0.7"/>
+        </svg>
       </div>
     </section>
 
+    <!-- Why Join Section -->
+    <section class="why-join-section">
+      <h2 class="section-title">Why Join?</h2>
+      
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon">🤝</div>
+          <h3 class="feature-title">Connect with Neighbors</h3>
+          <p class="feature-description">Meet and bond with locals.</p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon">📋❤️</div>
+          <h3 class="feature-title">Request or Offer Help</h3>
+          <p class="feature-description">Lend a hand or get assistance.</p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3 class="feature-title">Build a Caring Community</h3>
+          <p class="feature-description">Make a positive impact.</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- Hidden authenticated section -->
   <div class="screen" id="authenticatedSection" style="display: none;">
     <div class="container">
       <div style="text-align: center; margin-bottom: 30px;">
-        <img src="logo .png" alt="Good Neighbour Logo" class="logo-auth">
+        <svg class="logo-large" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="95" fill="white" stroke="#5a8f6f" stroke-width="3"/>
+          <path d="M100 40 L140 80 L140 130 L60 130 L60 80 Z" fill="none" stroke="#3d5a80" stroke-width="4"/>
+          <circle cx="75" cy="90" r="15" fill="#3d5a80"/>
+          <circle cx="125" cy="90" r="15" fill="#5a8f6f"/>
+          <path d="M60 110 Q75 95 90 110" fill="none" stroke="#3d5a80" stroke-width="3"/>
+          <path d="M110 110 Q125 95 140 110" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+          <rect x="85" y="140" width="12" height="15" fill="#3d5a80"/>
+          <rect x="103" y="140" width="12" height="15" fill="#5a8f6f"/>
+          <path d="M50 100 Q100 50 150 100" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+        </svg>
       </div>
       <h1 class="title">How can we help you?</h1>
       <p class="subtitle">Logged in as: <span id="currentUsername"></span></p>

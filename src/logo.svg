@@ -1,4 +1,10 @@
 <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+  <!-- White circular background -->
+  <circle cx="200" cy="150" r="140" fill="white"/>
+  
+  <!-- Gray border circle -->
+  <circle cx="200" cy="150" r="135" fill="none" stroke="#D3D3D3" stroke-width="8"/>
+  
   <!-- House roof -->
   <path d="M 140 50 L 200 10 L 260 50" fill="none" stroke="#233F6D" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
   <line x1="140" y1="50" x2="140" y2="70" stroke="#233F6D" stroke-width="14" stroke-linecap="round"/>
@@ -28,6 +34,7 @@
   <polygon points="217,260 231,242 245,260" fill="#5FB848"/>
   <rect x="223" y="272" width="7" height="10" fill="white"/>
   
-  <!-- Text -->
-  <text x="200" y="340" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#233F6D" text-anchor="middle">GOOD NEIGHBOUR</text>
+  <!-- Text in WHITE -->
+  <text x="200" y="360" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle">Good</text>
+  <text x="200" y="420" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle">Neighbour</text>
 </svg>
