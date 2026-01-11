@@ -377,15 +377,15 @@
       const myTasksList = document.getElementById('myTasksList');
       
       if (activeTasks.length === 0) {
-        myTasksList.innerHTML = '<p style="color: #b0b0b0; text-align: center;">You have no active tasks</p>';
+        myTasksList.innerHTML = '<p style="color:text-align: center;">You have no active tasks</p>';
       } else {
         myTasksList.innerHTML = activeTasks.map((task, index) => `
-          <div style="background: #2f2f2f; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-            <div style="color: #ffffff; font-weight: 600; margin-bottom: 8px;">${task.title}</div>
-            <div style="color: #b0b0b0; font-size: 14px;">👤 Requested by ${task.createdBy}</div>
-            <div style="color: #b0b0b0; font-size: 14px;">📦 ${getCategoryName(task.category)}</div>
-            <div style="color: #b0b0b0; font-size: 14px;">⏱️ ${task.duration}</div>
-            <div style="color: #b0b0b0; font-size: 14px;">📍 ${task.location}</div>
+          <div style="background: #EEEEEE; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+            <div style="font-weight: 600; margin-bottom: 8px;">${task.title}</div>
+            <div style="font-size: 14px;">👤 Requested by ${task.createdBy}</div>
+            <div style="font-size: 14px;">📦 ${getCategoryName(task.category)}</div>
+            <div style="font-size: 14px;">⏱️ ${task.duration}</div>
+            <div style="font-size: 14px;">📍 ${task.location}</div>
             <button onclick="completeTask(${index})" style="margin-top: 10px; padding: 8px 16px; background: #4a9d5f; color: white; border: none; border-radius: 6px; cursor: pointer;">Mark Complete</button>
           </div>
         `).join('');
