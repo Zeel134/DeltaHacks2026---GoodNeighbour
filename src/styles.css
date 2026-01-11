@@ -1,14 +1,14 @@
 /* Good Neighbor - Shared Styles */
 
 :root {
-  --primary-blue: #233F6D;
-  --secondary-blue: #1B345E;
-  --primary-green: #2F7D4F;
+  --primary-blue: #3d5a80;
+  --secondary-blue: #4a6fa5;
+  --primary-green: #5a8f6f;
   --secondary-green: #6ba583;
-  --light-bg: #F6EFE4;
+  --light-bg: #f5f3f0;
   --white: #ffffff;
-  --text-dark: #2A2A2A;
-  --text-medium: #2A2A2A;
+  --text-dark: #2c3e50;
+  --text-medium: #5a6c7d;
   --text-light: #7a8c9d;
   --border-light: #e0ddd8;
   --shadow: rgba(0, 0, 0, 0.1);
@@ -22,7 +22,7 @@
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: var(--light-bg);
   color: var(--text-dark);
   min-height: 100vh;
@@ -31,34 +31,21 @@ body {
 
 /* Logo Styles */
 .logo {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-}
-
-.logo-nav {
-  height: 150px;
-  width: auto;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
 }
 
 .logo-large {
-  width: 350px;
-  height: auto;
-  object-fit: contain;
-}
-
-.logo-auth {
-  width: 200px;
-  height: auto;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
 }
 
 /* Navigation Header */
 .nav-header {
-  background: linear-gradient(180deg, #233F6D, #1B345E);
-  height: 100px;
-  padding: 0 40px;
+  background: var(--primary-blue);
+  padding: 15px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -82,13 +69,13 @@ body {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
   color: var(--white);
   text-decoration: none;
 }
 
 .nav-brand-text {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--white);
 }
@@ -96,14 +83,11 @@ body {
 .nav-link {
   color: var(--white);
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  padding: 8px 20px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background 0.3s;
 }
 
 .nav-link:hover {
@@ -401,82 +385,55 @@ select.input-field {
 /* Landing Page Styles */
 .landing-page {
   min-height: 100vh;
-  padding-top: 100px;
-  background: var(--light-bg);
+  padding-top: 80px;
 }
 
 .hero-section {
-  padding: 80px;
-  background: var(--light-bg);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  padding: 80px 40px;
+  background: var(--white);
+  display: flex;
   align-items: center;
-  gap: 40px;
-  height: calc(100vh - 100px);
+  justify-content: space-between;
+  gap: 60px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .hero-content {
   flex: 1;
+  max-width: 600px;
 }
 
 .hero-title {
-  font-family: Georgia, serif;
-  font-size: 44px;
+  font-size: 48px;
   font-weight: 700;
   color: var(--primary-blue);
-  line-height: 1.2;
+  line-height: 1.3;
   margin-bottom: 20px;
 }
 
 .hero-divider {
-  width: 440px;
-  height: 3px;
-  background: var(--primary-blue);
-  margin-bottom: 30px;
+  width: 80px;
+  height: 4px;
+  background: var(--primary-green);
+  margin-bottom: 25px;
 }
 
 .hero-subtitle {
   font-size: 18px;
   color: var(--text-medium);
   line-height: 1.6;
-  margin-bottom: 28px;
-}
-
-.btn-get-started {
-  background: var(--primary-green);
-  color: var(--white);
-  padding: 16px 40px;
-  border-radius: 25px;
-  font-size: 18px;
-  font-weight: 700;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(47, 125, 79, 0.4);
-  max-width: fit-content;
-  letter-spacing: 0.5px;
-}
-
-.btn-get-started:hover {
-  background: #267041;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(47, 125, 79, 0.5);
+  margin-bottom: 35px;
 }
 
 .hero-illustration {
   flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  max-width: 600px;
 }
 
 .hero-illustration img {
   width: 100%;
   height: auto;
-  max-width: 100%;
 }
 
 /* Why Join Section */
@@ -1078,10 +1035,8 @@ select.input-field {
   }
 
   .hero-section {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     text-align: center;
-    padding: 60px 30px;
-    height: auto;
   }
 
   .hero-title {
@@ -1089,14 +1044,8 @@ select.input-field {
   }
 
   .hero-divider {
-    width: 100%;
-    max-width: 440px;
     margin-left: auto;
     margin-right: auto;
-  }
-  
-  .hero-illustration {
-    justify-content: center;
   }
 }
 
