@@ -1,14 +1,14 @@
 /* Good Neighbor - Shared Styles */
 
 :root {
-  --primary-blue: #3d5a80;
-  --secondary-blue: #4a6fa5;
-  --primary-green: #5a8f6f;
+  --primary-blue: #233F6D;
+  --secondary-blue: #1B345E;
+  --primary-green: #2F7D4F;
   --secondary-green: #6ba583;
-  --light-bg: #f5f3f0;
+  --light-bg: #F6EFE4;
   --white: #ffffff;
-  --text-dark: #2c3e50;
-  --text-medium: #5a6c7d;
+  --text-dark: #2A2A2A;
+  --text-medium: #2A2A2A;
   --text-light: #7a8c9d;
   --border-light: #e0ddd8;
   --shadow: rgba(0, 0, 0, 0.1);
@@ -22,7 +22,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   background: var(--light-bg);
   color: var(--text-dark);
   min-height: 100vh;
@@ -31,21 +31,34 @@ body {
 
 /* Logo Styles */
 .logo {
-  width: 50px;
-  height: 50px;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.logo-nav {
+  height: 40px;
+  width: auto;
   object-fit: contain;
 }
 
 .logo-large {
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+}
+
+.logo-auth {
+  width: 200px;
+  height: auto;
   object-fit: contain;
 }
 
 /* Navigation Header */
 .nav-header {
-  background: var(--primary-blue);
-  padding: 15px 40px;
+  background: linear-gradient(180deg, #233F6D, #1B345E);
+  height: 64px;
+  padding: 0 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,13 +73,13 @@ body {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
   color: var(--white);
   text-decoration: none;
 }
 
 .nav-brand-text {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--white);
 }
@@ -75,7 +88,7 @@ body {
   color: var(--white);
   text-decoration: none;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   padding: 8px 16px;
   border-radius: 6px;
   transition: background 0.3s;
@@ -370,55 +383,80 @@ select.input-field {
 /* Landing Page Styles */
 .landing-page {
   min-height: 100vh;
-  padding-top: 80px;
+  padding-top: 64px;
+  background: var(--light-bg);
 }
 
 .hero-section {
-  padding: 80px 40px;
-  background: var(--white);
-  display: flex;
+  padding: 80px;
+  background: var(--light-bg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 60px;
+  gap: 40px;
+  height: calc(100vh - 64px);
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .hero-content {
   flex: 1;
-  max-width: 600px;
 }
 
 .hero-title {
-  font-size: 48px;
+  font-family: Georgia, serif;
+  font-size: 44px;
   font-weight: 700;
   color: var(--primary-blue);
-  line-height: 1.3;
+  line-height: 1.2;
   margin-bottom: 20px;
 }
 
 .hero-divider {
-  width: 80px;
-  height: 4px;
-  background: var(--primary-green);
-  margin-bottom: 25px;
+  width: 440px;
+  height: 3px;
+  background: var(--primary-blue);
+  margin-bottom: 30px;
 }
 
 .hero-subtitle {
   font-size: 18px;
   color: var(--text-medium);
   line-height: 1.6;
-  margin-bottom: 35px;
+  margin-bottom: 28px;
+}
+
+.btn-get-started {
+  background: var(--primary-green);
+  color: var(--white);
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: none;
+  max-width: fit-content;
+}
+
+.btn-get-started:hover {
+  background: #267041;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(47, 125, 79, 0.3);
 }
 
 .hero-illustration {
   flex: 1;
-  max-width: 600px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .hero-illustration img {
   width: 100%;
   height: auto;
+  max-width: 100%;
 }
 
 /* Why Join Section */
@@ -1020,8 +1058,10 @@ select.input-field {
   }
 
   .hero-section {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     text-align: center;
+    padding: 60px 30px;
+    height: auto;
   }
 
   .hero-title {
@@ -1029,8 +1069,14 @@ select.input-field {
   }
 
   .hero-divider {
+    width: 100%;
+    max-width: 440px;
     margin-left: auto;
     margin-right: auto;
+  }
+  
+  .hero-illustration {
+    justify-content: center;
   }
 }
 
