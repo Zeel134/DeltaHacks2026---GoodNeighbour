@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Good Neighbor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="screen">
+    <div class="container">
+      <h1 class="title">Create Account</h1>
+      <div class="error-message" id="signupError"></div>
+      <div class="success-message" id="signupSuccess"></div>
+      
+      <form id="signupForm">
+        <div class="input-group">
+          <label class="input-label" for="signupUsername">Username</label>
+          <input 
+            type="text" 
+            id="signupUsername" 
+            class="input-field" 
+            placeholder="Choose a username"
+            required
+            minlength="3"
+          />
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="signupPassword">Password</label>
+          <input 
+            type="password" 
+            id="signupPassword" 
+            class="input-field" 
+            placeholder="Choose a password"
+            required
+            minlength="4"
+          />
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="signupPasswordConfirm">Confirm Password</label>
+          <input 
+            type="password" 
+            id="signupPasswordConfirm" 
+            class="input-field" 
+            placeholder="Confirm your password"
+            required
+            minlength="4"
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+        <div class="link-text">
+          Already have an account? <a href="login.html">Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="utils.js"></script>
+  <script>
+    // Check if user is already logged in
+    if (isAuthenticated()) {
+      window.location.href = 'main.html';
+    }
+
+    // Handle signup form submission
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('signupUsername').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupPasswordConfirm').value;
+      
+      if (password !== confirmPassword) {
+        showError('signupError', 'Passwords do not match!');
+        return;
+      }
+      
+      const users = getUsers();
+      
+      if (users[username]) {
+        showError('signupError', 'Username already exists!');
+        return;
+      }
+      
+      // Create new user
+      users[username] = {
+        password: password,
+        createdAt: new Date().toISOString()
+      };
+      
+      saveUsers(users);
+      showSuccess('signupSuccess', 'Account created successfully! Redirecting to login...');
+      
+      // Redirect to login page
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

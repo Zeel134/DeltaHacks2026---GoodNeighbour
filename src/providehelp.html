@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provide Help - Good Neighbor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="main-screen" style="display: block;">
+    <button class="back-button" id="backButton">← Back</button>
+    <button class="sidebar-toggle" id="sidebarToggle">☰ Filters</button>
+    
+    <div class="main-layout">
+      <!-- Sidebar with Filters -->
+      <div class="sidebar" id="sidebar">
+        <h2 class="sidebar-title">Filters</h2>
+        
+        <div class="filter-section">
+          <div class="filter-section-title">Sort By</div>
+          <select id="sortFilter" class="filter-select">
+            <option value="urgency">Urgency (High to Low)</option>
+            <option value="distance">Distance (Nearest First)</option>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Urgency</div>
+          <select id="urgencyFilter" class="filter-select">
+            <option value="all">All Urgency Levels</option>
+            <option value="high">High Urgency</option>
+            <option value="medium">Medium Urgency</option>
+            <option value="low">Low Urgency</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Distance</div>
+          <select id="distanceFilter" class="filter-select">
+            <option value="all">Any Distance</option>
+            <option value="1">Within 1 km</option>
+            <option value="2">Within 2 km</option>
+            <option value="5">Within 5 km</option>
+            <option value="10">Within 10 km</option>
+            <option value="20">Within 20 km</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Duration</div>
+          <select id="durationFilter" class="filter-select">
+            <option value="all">Any Duration</option>
+            <option value="< 30 min">Less than 30 min</option>
+            <option value="30-60 min">30-60 minutes</option>
+            <option value="1-2 hours">1-2 hours</option>
+            <option value="2-4 hours">2-4 hours</option>
+            <option value="4+ hours">4+ hours</option>
+          </select>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-section-title">Category</div>
+          <div class="filter-checkbox-group">
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="moving" checked>
+              Moving & Transport
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="gardening" checked>
+              Gardening & Yard Work
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="shopping" checked>
+              Shopping & Errands
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="tech" checked>
+              Tech Support
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="cleaning" checked>
+              Cleaning
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="repairs" checked>
+              Repairs & Maintenance
+            </label>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" class="category-filter" value="other" checked>
+              Other
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="main-header">
+          <div class="header-info" id="taskCount">Loading tasks...</div>
+          <button class="btn-my-tasks" id="btnMyTasks">My Active Tasks</button>
+        </div>
+        <div class="scrollable-content">
+          <div class="grid" id="taskGrid">
+            <!-- Tasks will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Accept Modal -->
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle">Task Details</h2>
+      <div class="modal-info"><strong>Created by:</strong> <span id="modalCreator"></span></div>
+      <div class="modal-info"><strong>Category:</strong> <span id="modalCategory"></span></div>
+      <div class="modal-info"><strong>Duration:</strong> <span id="modalDuration"></span></div>
+      <div class="modal-info"><strong>Location:</strong> <span id="modalLocation"></span></div>
+      <div class="modal-info"><strong>Distance:</strong> <span id="modalDistance"></span></div>
+      <div class="modal-info"><strong>Urgency:</strong> <span id="modalUrgency"></span></div>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
+        <button class="modal-btn modal-btn-accept" id="modalAccept">Accept Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Active Tasks Modal -->
+  <div class="modal" id="myTasksModal">
+    <div class="modal-content">
+      <h2 class="modal-title">My Active Tasks</h2>
+      <div id="myTasksList" style="max-height: 300px; overflow-y: auto; margin: 20px 0;">
+        <!-- Active tasks will be displayed here -->
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" id="closeMyTasks">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="utils.js"></script>
+  <script>
+    // Check authentication
+    if (!isAuthenticated()) {
+      window.location.href = 'login.html';
+    }
+
+    let tasks = [];
+    let activeTasks = [];
+    let currentTaskIndex = null;
+    let userLocation = null;
+
+    // Current filter states
+    let filters = {
+      urgency: 'all',
+      distance: 'all',
+      duration: 'all',
+      categories: ['moving', 'gardening', 'shopping', 'tech', 'cleaning', 'repairs', 'other'],
+      sort: 'urgency'
+    };
+
+    // Load tasks and user location
+    function init() {
+      tasks = loadAllTasks();
+      activeTasks = loadActiveTasks();
+      getUserLocation(function(location) {
+        userLocation = location;
+        renderTasks();
+      });
+    }
+
+    // Render tasks on the grid
+    function renderTasks() {
+      const taskGrid = document.getElementById('taskGrid');
+      taskGrid.innerHTML = '';
+      
+      let filteredTasks = tasks.filter(task => {
+        // Filter by urgency
+        if (filters.urgency !== 'all' && task.urgency !== filters.urgency) {
+          return false;
+        }
+
+        // Filter by duration
+        if (filters.duration !== 'all' && task.duration !== filters.duration) {
+          return false;
+        }
+
+        // Filter by category
+        if (!filters.categories.includes(task.category)) {
+          return false;
+        }
+
+        // Filter by distance
+        if (filters.distance !== 'all' && userLocation && task.coordinates) {
+          const distance = calculateDistance(
+            userLocation.lat, userLocation.lng,
+            task.coordinates.lat, task.coordinates.lng
+          );
+          if (distance > parseFloat(filters.distance)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Add distance to tasks
+      filteredTasks = filteredTasks.map(task => {
+        if (userLocation && task.coordinates) {
+          task.distance = calculateDistance(
+            userLocation.lat, userLocation.lng,
+            task.coordinates.lat, task.coordinates.lng
+          );
+        } else {
+          task.distance = null;
+        }
+        return task;
+      });
+
+      // Sort tasks
+      if (filters.sort === 'urgency') {
+        const urgencyOrder = { high: 0, medium: 1, low: 2 };
+        filteredTasks.sort((a, b) => urgencyOrder[a.urgency] - urgencyOrder[b.urgency]);
+      } else if (filters.sort === 'distance') {
+        filteredTasks.sort((a, b) => {
+          if (a.distance === null) return 1;
+          if (b.distance === null) return -1;
+          return a.distance - b.distance;
+        });
+      } else if (filters.sort === 'newest') {
+        filteredTasks.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else if (filters.sort === 'oldest') {
+        filteredTasks.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      }
+      
+      filteredTasks.forEach((task) => {
+        const originalIndex = tasks.indexOf(task);
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        
+        const urgencyClass = `urgency-${task.urgency}`;
+        const urgencyLabel = task.urgency.charAt(0).toUpperCase() + task.urgency.slice(1);
+        
+        let distanceHTML = '';
+        if (task.distance !== null) {
+          distanceHTML = `<div class="tile-distance">📍 ${formatDistance(task.distance)}</div>`;
+        }
+
+        tile.innerHTML = `
+          <div class="tile-title">${task.title}</div>
+          <div class="tile-creator">👤 Posted by ${task.createdBy}</div>
+          <div class="tile-category">${getCategoryName(task.category)}</div>
+          <div class="tile-info">⏱️ ${task.duration}</div>
+          <div class="tile-info">📌 ${task.location}</div>
+          ${distanceHTML}
+          <div class="tile-urgency ${urgencyClass}">${urgencyLabel}</div>
+          <div class="tile-age">${getTimeAgo(task.timestamp)}</div>
+        `;
+        tile.addEventListener('click', () => openTaskModal(originalIndex));
+        taskGrid.appendChild(tile);
+      });
+
+      // Update task count
+      document.getElementById('taskCount').textContent =
+        `Showing ${filteredTasks.length} of ${tasks.length} tasks`;
+
+      if (filteredTasks.length === 0) {
+        taskGrid.innerHTML = '<p style="color: #b0b0b0; text-align: center; padding: 40px;">No tasks match your filters</p>';
+      }
+    }
+
+    // Open task modal
+    function openTaskModal(index) {
+      currentTaskIndex = index;
+      const task = tasks[index];
+      
+      document.getElementById('modalTitle').textContent = task.title;
+      document.getElementById('modalCreator').textContent = task.createdBy;
+      document.getElementById('modalCategory').textContent = getCategoryName(task.category);
+      document.getElementById('modalDuration').textContent = task.duration;
+      document.getElementById('modalLocation').textContent = task.location;
+      
+      if (task.distance !== null && task.distance !== undefined) {
+        document.getElementById('modalDistance').textContent = formatDistance(task.distance);
+      } else {
+        document.getElementById('modalDistance').textContent = 'Unknown';
+      }
+      
+      document.getElementById('modalUrgency').textContent = task.urgency.charAt(0).toUpperCase() + task.urgency.slice(1);
+      document.getElementById('taskModal').style.display = 'flex';
+    }
+
+    // Close task modal
+    function closeTaskModal() {
+      document.getElementById('taskModal').style.display = 'none';
+      currentTaskIndex = null;
+    }
+
+    // Back button
+    document.getElementById('backButton').addEventListener('click', function() {
+      window.location.href = 'main.html';
+    });
+
+    // Sidebar toggle for mobile
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    });
+
+    // Modal cancel button
+    document.getElementById('modalCancel').addEventListener('click', function() {
+      closeTaskModal();
+    });
+
+    // Modal accept button
+    document.getElementById('modalAccept').addEventListener('click', function() {
+      if (currentTaskIndex !== null) {
+        const acceptedTask = tasks[currentTaskIndex];
+        activeTasks.push(acceptedTask);
+        
+        tasks.splice(currentTaskIndex, 1);
+        saveAllTasks(tasks);
+        saveActiveTasks(activeTasks);
+        renderTasks();
+        closeTaskModal();
+        alert('Task accepted! Thank you for helping your neighbor!');
+      }
+    });
+
+    // Filter event listeners
+    document.getElementById('sortFilter').addEventListener('change', function() {
+      filters.sort = this.value;
+      renderTasks();
+    });
+
+    document.getElementById('urgencyFilter').addEventListener('change', function() {
+      filters.urgency = this.value;
+      renderTasks();
+    });
+
+    document.getElementById('distanceFilter').addEventListener('change', function() {
+      filters.distance = this.value;
+      renderTasks();
+    });
+
+    document.getElementById('durationFilter').addEventListener('change', function() {
+      filters.duration = this.value;
+      renderTasks();
+    });
+
+    // Category checkboxes
+    document.querySelectorAll('.category-filter').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          if (!filters.categories.includes(this.value)) {
+            filters.categories.push(this.value);
+          }
+        } else {
+          filters.categories = filters.categories.filter(cat => cat !== this.value);
+        }
+        renderTasks();
+      });
+    });
+
+    // My Active Tasks button
+    document.getElementById('btnMyTasks').addEventListener('click', function() {
+      const myTasksList = document.getElementById('myTasksList');
+      
+      if (activeTasks.length === 0) {
+        myTasksList.innerHTML = '<p style="color: #b0b0b0; text-align: center;">You have no active tasks</p>';
+      } else {
+        myTasksList.innerHTML = activeTasks.map((task, index) => `
+          <div style="background: #2f2f2f; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+            <div style="color: #ffffff; font-weight: 600; margin-bottom: 8px;">${task.title}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">👤 Requested by ${task.createdBy}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">📦 ${getCategoryName(task.category)}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">⏱️ ${task.duration}</div>
+            <div style="color: #b0b0b0; font-size: 14px;">📍 ${task.location}</div>
+            <button onclick="completeTask(${index})" style="margin-top: 10px; padding: 8px 16px; background: #4a9d5f; color: white; border: none; border-radius: 6px; cursor: pointer;">Mark Complete</button>
+          </div>
+        `).join('');
+      }
+      
+      document.getElementById('myTasksModal').style.display = 'flex';
+    });
+
+    // Close My Tasks modal
+    document.getElementById('closeMyTasks').addEventListener('click', function() {
+      document.getElementById('myTasksModal').style.display = 'none';
+    });
+
+    // Complete task function
+    window.completeTask = function(index) {
+      activeTasks.splice(index, 1);
+      saveActiveTasks(activeTasks);
+      alert('Task completed! Great job helping your neighbor!');
+      document.getElementById('myTasksModal').style.display = 'none';
+    };
+
+    // Close modal when clicking outside
+    document.getElementById('taskModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeTaskModal();
+      }
+    });
+
+    // Close my tasks modal when clicking outside
+    document.getElementById('myTasksModal').addEventListener('click', function(event) {
+      if (event.target === this) {
+        document.getElementById('myTasksModal').style.display = 'none';
+      }
+    });
+
+    // Initialize on page load
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>

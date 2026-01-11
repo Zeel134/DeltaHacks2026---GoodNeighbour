@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help & Documentation - Good Neighbor</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .help-container {
+      background: #3a3a3a;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 20px;
+    }
+
+    .help-section {
+      margin-bottom: 30px;
+    }
+
+    .help-section h2 {
+      color: #4a9d5f;
+      font-size: 24px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #5a5a5a;
+      padding-bottom: 10px;
+    }
+
+    .help-section h3 {
+      color: #ffffff;
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .help-section p {
+      color: #b0b0b0;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .help-section ul {
+      color: #b0b0b0;
+      font-size: 16px;
+      line-height: 1.8;
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .help-section li {
+      margin-bottom: 8px;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      background: #4a9d5f;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-button" id="backButton">← Back</button>
+  
+  <div class="screen">
+    <div class="help-container">
+      <h1 class="title">Help & Documentation</h1>
+
+      <div class="help-section">
+        <h2>Welcome to Good Neighbor</h2>
+        <p>
+          Good Neighbor is a community-driven platform that connects people who need help with those willing to provide it. 
+          Our mission is to build stronger, more connected communities by making it easy for neighbors to help each other.
+        </p>
+      </div>
+
+      <div class="help-section">
+        <h2>Getting Started</h2>
+        
+        <h3>1. Create an Account</h3>
+        <p>
+          Sign up with a username and password. Your account allows you to both request help and offer assistance to others in your community.
+        </p>
+
+        <h3>2. Choose Your Action</h3>
+        <p>After logging in, you'll see two main options:</p>
+        <ul>
+          <li><strong>I want help</strong> - Post a request for assistance with a task</li>
+          <li><strong>I want to help</strong> - Browse and accept tasks from your neighbors</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h2>Requesting Help</h2>
+        <p>When you need assistance, follow these steps:</p>
+        <ul>
+          <li><strong>Task Title:</strong> Provide a clear, descriptive title for your request</li>
+          <li><strong>Category:</strong> Select the type of help you need (moving, gardening, tech support, etc.)</li>
+          <li><strong>Duration:</strong> Estimate how long the task will take</li>
+          <li><strong>Location:</strong> Enter your address or click on the map to set your location</li>
+          <li><strong>Urgency:</strong> Indicate how soon you need help (High, Medium, or Low)</li>
+        </ul>
+        <p>
+          Once submitted, your request will be visible to other community members who can accept and help you.
+        </p>
+      </div>
+
+      <div class="help-section">
+        <h2>Providing Help</h2>
+        <p>Browse available tasks and use filters to find opportunities that match your availability:</p>
+        
+        <h3>Available Filters</h3>
+        <ul>
+          <li><strong>Sort By:</strong> Urgency, Distance, Newest, or Oldest</li>
+          <li><strong>Urgency Level:</strong> Filter by how urgent the task is</li>
+          <li><strong>Distance:</strong> Show only tasks within a certain radius</li>
+          <li><strong>Duration:</strong> Filter by estimated time commitment</li>
+          <li><strong>Category:</strong> Select specific types of tasks you're interested in</li>
+        </ul>
+
+        <h3>Accepting Tasks</h3>
+        <p>
+          Click on any task to view details. If you'd like to help, click "Accept Task" to add it to your active tasks list.
+        </p>
+      </div>
+
+      <div class="help-section">
+        <h2>Managing Your Tasks</h2>
+        <p>
+          Click the "My Active Tasks" button to view all tasks you've accepted. Once you've completed a task, 
+          mark it as complete to remove it from your active list.
+        </p>
+      </div>
+
+      <div class="help-section">
+        <h2>Task Categories</h2>
+        <div>
+          <span class="feature-badge">Moving & Transport</span>
+          <span class="feature-badge">Gardening & Yard Work</span>
+          <span class="feature-badge">Shopping & Errands</span>
+          <span class="feature-badge">Tech Support</span>
+          <span class="feature-badge">Cleaning</span>
+          <span class="feature-badge">Repairs & Maintenance</span>
+          <span class="feature-badge">Other</span>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h2>Privacy & Safety</h2>
+        <ul>
+          <li>Your exact location is only shared when you post a help request</li>
+          <li>All data is stored locally in your browser</li>
+          <li>Always meet in public places when appropriate</li>
+          <li>Trust your instincts and prioritize your safety</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h2>Tips for Success</h2>
+        <ul>
+          <li>Be specific and clear in your task descriptions</li>
+          <li>Respond promptly to those who accept your requests</li>
+          <li>Show appreciation for help received</li>
+          <li>Start with smaller tasks to build trust in the community</li>
+          <li>Be reliable - if you accept a task, follow through</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h2>Technical Requirements</h2>
+        <ul>
+          <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+          <li>JavaScript enabled</li>
+          <li>Location services enabled for distance calculations (optional)</li>
+          <li>Internet connection for map features</li>
+        </ul>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="window.location.href='main.html'">Back to Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="utils.js"></script>
+  <script>
+    // Back button
+    document.getElementById('backButton').addEventListener('click', function() {
+      if (isAuthenticated()) {
+        window.location.href = 'main.html';
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+</body>
+</html>
