@@ -31,15 +31,17 @@ body {
 
 /* Logo Styles */
 .logo {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
+  width: 230px;
+  height: 75px;
+}
+
+.logo-small {
+  height: 60px;
 }
 
 .logo-large {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
+  width: 400px;
+  height: 125px;
 }
 
 /* Navigation Header */
@@ -58,7 +60,7 @@ body {
 }
 
 /* Compact navbar for other pages */
-.nav-header.compact {
+.nav-header.compact{
   height: 64px;
 }
 
@@ -389,7 +391,8 @@ select.input-field {
 }
 
 .hero-section {
-  padding: 80px 40px;
+  padding: 120px 40px;
+  min-height: calc(100vh - 80px);
   background: var(--white);
   display: flex;
   align-items: center;
@@ -519,10 +522,19 @@ select.input-field {
   max-width: 500px;
 }
 
+/* Logo container with contrasting background */
+.container > div:has(.logo) {
+  background: var(--primary-blue);
+  margin: -50px -50px 40px -50px;
+  padding: 30px;
+  border-radius: 20px 20px 0 0;
+  text-align: center;
+}
+
 .title {
   color: var(--primary-blue);
   font-size: 32px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: center;
   font-weight: 700;
 }
@@ -530,7 +542,7 @@ select.input-field {
 .subtitle {
   color: var(--text-medium);
   font-size: 16px;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
   text-align: center;
 }
 
