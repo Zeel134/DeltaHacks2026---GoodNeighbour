@@ -7,53 +7,119 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="screen">
-    <div class="container">
-      <h1 class="title">Create Account</h1>
-      <div class="error-message" id="signupError"></div>
-      <div class="success-message" id="signupSuccess"></div>
-      
-      <form id="signupForm">
-        <div class="input-group">
-          <label class="input-label" for="signupUsername">Username</label>
-          <input 
-            type="text" 
-            id="signupUsername" 
-            class="input-field" 
-            placeholder="Choose a username"
-            required
-            minlength="3"
-          />
+  <div class="split-screen">
+    <!-- Left Side - Welcome -->
+    <div class="split-left">
+      <div class="split-left-content">
+        <div class="split-logo">
+          <svg class="logo-large" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="95" fill="white" stroke="#5a8f6f" stroke-width="3"/>
+            <path d="M100 40 L140 80 L140 130 L60 130 L60 80 Z" fill="none" stroke="#3d5a80" stroke-width="4"/>
+            <circle cx="75" cy="90" r="15" fill="#3d5a80"/>
+            <circle cx="125" cy="90" r="15" fill="#5a8f6f"/>
+            <path d="M60 110 Q75 95 90 110" fill="none" stroke="#3d5a80" stroke-width="3"/>
+            <path d="M110 110 Q125 95 140 110" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+            <rect x="85" y="140" width="12" height="15" fill="#3d5a80"/>
+            <rect x="103" y="140" width="12" height="15" fill="#5a8f6f"/>
+            <path d="M50 100 Q100 50 150 100" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+          </svg>
+          <span class="nav-brand-text">Good Neighbour</span>
         </div>
-        <div class="input-group">
-          <label class="input-label" for="signupPassword">Password</label>
-          <input 
-            type="password" 
-            id="signupPassword" 
-            class="input-field" 
-            placeholder="Choose a password"
-            required
-            minlength="4"
-          />
+        
+        <h1 class="welcome-title">Welcome Back!</h1>
+        <p class="welcome-subtitle">
+          Already part of the community? Sign in to continue helping and connecting with your neighbours.
+        </p>
+        
+        <button class="btn btn-secondary" onclick="window.location.href='login.html'" style="max-width: 250px;">Sign In</button>
+      </div>
+    </div>
+
+    <!-- Right Side - Signup Form -->
+    <div class="split-right">
+      <div class="auth-container">
+        <h2 class="auth-title">Create Account</h2>
+        
+        <div class="social-login">
+          <button class="social-btn" title="Sign up with Facebook">f</button>
+          <button class="social-btn" title="Sign up with Google">G+</button>
+          <button class="social-btn" title="Sign up with LinkedIn">in</button>
         </div>
-        <div class="input-group">
-          <label class="input-label" for="signupPasswordConfirm">Confirm Password</label>
-          <input 
-            type="password" 
-            id="signupPasswordConfirm" 
-            class="input-field" 
-            placeholder="Confirm your password"
-            required
-            minlength="4"
-          />
-        </div>
-        <div class="button-group">
-          <button type="submit" class="btn btn-primary">Sign Up</button>
-        </div>
-        <div class="link-text">
-          Already have an account? <a href="login.html">Login</a>
-        </div>
-      </form>
+        
+        <p class="divider-text">or use your email for registration:</p>
+        
+        <div class="error-message" id="signupError"></div>
+        <div class="success-message" id="signupSuccess"></div>
+        
+        <form id="signupForm">
+          <div class="input-group">
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input 
+                type="text" 
+                id="signupUsername" 
+                class="input-field" 
+                placeholder="Name"
+                required
+                minlength="3"
+              />
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input 
+                type="email" 
+                id="signupEmail" 
+                class="input-field" 
+                placeholder="Email"
+                required
+              />
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input 
+                type="password" 
+                id="signupPassword" 
+                class="input-field" 
+                placeholder="Password"
+                required
+                minlength="4"
+              />
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <div class="input-wrapper">
+              <span class="input-icon">📍</span>
+              <select 
+                id="signupLocation" 
+                class="input-field" 
+                required
+              >
+                <option value="">Location</option>
+                <option value="Downtown">Downtown</option>
+                <option value="North End">North End</option>
+                <option value="South End">South End</option>
+                <option value="East Side">East Side</option>
+                <option value="West Side">West Side</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </div>
+          
+          <p class="privacy-text">
+            By signing up, you agree to our <a href="#">Privacy Policy</a>.
+          </p>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -69,11 +135,12 @@
       e.preventDefault();
       
       const username = document.getElementById('signupUsername').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
-      const confirmPassword = document.getElementById('signupPasswordConfirm').value;
+      const location = document.getElementById('signupLocation').value;
       
-      if (password !== confirmPassword) {
-        showError('signupError', 'Passwords do not match!');
+      if (!location) {
+        showError('signupError', 'Please select a location!');
         return;
       }
       
@@ -87,6 +154,8 @@
       // Create new user
       users[username] = {
         password: password,
+        email: email,
+        location: location,
         createdAt: new Date().toISOString()
       };
       

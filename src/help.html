@@ -7,10 +7,10 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     .help-container {
-      background: #3a3a3a;
+      background: var(--white);
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 30px var(--shadow);
       width: 90%;
       max-width: 800px;
       max-height: 90vh;
@@ -23,29 +23,29 @@
     }
 
     .help-section h2 {
-      color: #4a9d5f;
+      color: var(--primary-blue);
       font-size: 24px;
       margin-bottom: 15px;
-      border-bottom: 2px solid #5a5a5a;
+      border-bottom: 2px solid var(--border-light);
       padding-bottom: 10px;
     }
 
     .help-section h3 {
-      color: #ffffff;
+      color: var(--primary-blue);
       font-size: 18px;
       margin-top: 20px;
       margin-bottom: 10px;
     }
 
     .help-section p {
-      color: #b0b0b0;
+      color: var(--text-medium);
       font-size: 16px;
       line-height: 1.6;
       margin-bottom: 10px;
     }
 
     .help-section ul {
-      color: #b0b0b0;
+      color: var(--text-medium);
       font-size: 16px;
       line-height: 1.8;
       margin-left: 20px;
@@ -58,8 +58,8 @@
 
     .feature-badge {
       display: inline-block;
-      background: #4a9d5f;
-      color: #ffffff;
+      background: var(--primary-green);
+      color: var(--white);
       padding: 4px 12px;
       border-radius: 6px;
       font-size: 14px;
@@ -70,7 +70,24 @@
   </style>
 </head>
 <body>
-  <button class="back-button" id="backButton">← Back</button>
+  <!-- Navigation Header -->
+  <nav class="nav-header">
+    <a href="main.html" class="nav-brand">
+      <svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" fill="white" stroke="#5a8f6f" stroke-width="3"/>
+        <path d="M100 40 L140 80 L140 130 L60 130 L60 80 Z" fill="none" stroke="#3d5a80" stroke-width="4"/>
+        <circle cx="75" cy="90" r="15" fill="#3d5a80"/>
+        <circle cx="125" cy="90" r="15" fill="#5a8f6f"/>
+        <path d="M60 110 Q75 95 90 110" fill="none" stroke="#3d5a80" stroke-width="3"/>
+        <path d="M110 110 Q125 95 140 110" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+        <rect x="85" y="140" width="12" height="15" fill="#3d5a80"/>
+        <rect x="103" y="140" width="12" height="15" fill="#5a8f6f"/>
+        <path d="M50 100 Q100 50 150 100" fill="none" stroke="#5a8f6f" stroke-width="3"/>
+      </svg>
+      <span class="nav-brand-text">GoodNeighbour</span>
+    </a>
+    <a href="#" class="nav-link" id="backButton">← Back</a>
+  </nav>
   
   <div class="screen">
     <div class="help-container">
@@ -195,7 +212,8 @@
   <script src="utils.js"></script>
   <script>
     // Back button
-    document.getElementById('backButton').addEventListener('click', function() {
+    document.getElementById('backButton').addEventListener('click', function(e) {
+      e.preventDefault();
       if (isAuthenticated()) {
         window.location.href = 'main.html';
       } else {
